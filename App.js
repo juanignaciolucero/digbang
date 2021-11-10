@@ -8,6 +8,21 @@ import WrapButton from './src/components/WrapButton';
 const App = () => {
   const [amount, setAmount] = React.useState(38000);
   const [term, setTerm] = React.useState(12);
+  const setAmountLimits = amount => {
+    if (parseInt(amount) < 5000) {
+      setAmount(5000);
+    } else if (parseInt(amount) > 50000) {
+      setAmount(50000);
+    }
+  };
+  const setTermLimits = () => {
+    if (term === '' || term < 3) {
+      setTerm(3);
+    } else if (term > 24) {
+      setTerm(24);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#084F85', '#003B67']} style={styles.gradient}>
@@ -33,20 +48,8 @@ const App = () => {
                     }
                   }}
                   precision={0}
-                  onEndEditing={() => {
-                    if (parseInt(amount) < 5000) {
-                      setAmount(5000);
-                    } else if (parseInt(amount) > 50000) {
-                      setAmount(50000);
-                    }
-                  }}
-                  onBlur={() => {
-                    if (parseInt(amount) < 5000) {
-                      setAmount(5000);
-                    } else if (parseInt(amount) > 50000) {
-                      setAmount(50000);
-                    }
-                  }}
+                  onEndEditing={setAmountLimits}
+                  onBlur={setAmountLimits}
                 />
               </View>
             </View>
@@ -71,26 +74,13 @@ const App = () => {
                 <TextInput
                   keyboardType="numeric"
                   onChangeText={value => {
-                    if (value != '') setTerm(value);
+                    setTerm(value);
                   }}
                   style={styles.amountValue}
                   value={term.toString()}
                   textAlign="center"
-                  onEndEditing={() => {
-                    if (term)
-                      if (term < 3) {
-                        setTerm(3);
-                      } else if (term > 24) {
-                        setTerm(24);
-                      }
-                  }}
-                  onBlur={() => {
-                    if (term < 3) {
-                      setTerm(3);
-                    } else if (term > 24) {
-                      setTerm(24);
-                    }
-                  }}
+                  onEndEditing={setTermLimits}
+                  onBlur={setTermLimits}
                 />
               </View>
             </View>
@@ -110,7 +100,7 @@ const App = () => {
           </View>
           <View>
             <View style={styles.totalDesc}>
-              <Text style={styles.totalText}>CUOTA FIJA POR MES</Text>
+              <Text style={styles.totalText}>{'CUOTA FIJA POR MES  '}</Text>
               <Text style={styles.total}>
                 {amount != '' && term != ''
                   ? '$ ' + formatNumber(amount / term, 2, '.', ',')
@@ -118,10 +108,14 @@ const App = () => {
               </Text>
             </View>
             <View style={styles.buttonsContainer}>
-              <View style={{width: '70%', paddingRight: 10}}>
-                <Button color={'#17AA8D'} title="OBTENE CREDITO" />
+              <View style={{width: '65%', paddingRight: 10}}>
+                <WrapButton
+                  fontSize={15}
+                  color={'#17AA8D'}
+                  title="OBTENÉ CRÉDITO"
+                />
               </View>
-              <View style={{width: '30%', height: 30}}>
+              <View style={{width: '35%', height: 30}}>
                 <WrapButton
                   onPress={() => {}}
                   color={'#0B548B'}
@@ -196,9 +190,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   totalDesc: {
-    padding: 10,
+    paddingVertical: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     backgroundColor: '#00355D',
     alignItems: 'center',
   },
@@ -206,7 +200,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Montserrat-Bold',
     fontSize: 10,
-    paddingLeft: 15,
   },
   total: {
     color: 'white',
