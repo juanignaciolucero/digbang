@@ -1,8 +1,8 @@
 # Instalacion
 
-yarn install
-cd ios
-pod install
+yarn install &&
+cd ios &&
+pod install &&
 cd ..
 
 # Ejecucion
